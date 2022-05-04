@@ -3,9 +3,9 @@ package Immobiliser;
 import java.awt.*;
 import javax.swing.*;
 
-public class menu_draw extends JPanel{
+public class MenuDraw extends JPanel{
 
-    menu_draw(){
+    MenuDraw(){
 
         this.setPreferredSize(new Dimension(1920,1080)); //szélesség-hosszúság
     }
@@ -32,4 +32,4 @@ public class menu_draw extends JPanel{
 
     }
 
-}//vége
+}//end

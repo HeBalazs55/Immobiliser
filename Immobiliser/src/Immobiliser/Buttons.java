@@ -4,7 +4,7 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 
-public class buttons{
+public class Buttons {
 
     private static String szt = "Comic Sans"; //Gombok szövegének betűstílusa
     private static Boolean f = false; //A gombokban lévő szövegnek ne legyen kerete
@@ -25,8 +25,8 @@ public class buttons{
         szimulalasg.setBounds(680, 250, 175, 75);
         szimulalasg.setText("Szimulálás");
         szimulalasg.setFont(new Font(szt,Font.BOLD, 20));
-        szimulalasg.addActionListener((event) -> menu.close());
-        szimulalasg.addActionListener((event) -> new valasztas());
+        szimulalasg.addActionListener((event) -> Menu.close());
+        szimulalasg.addActionListener((event) -> new Chose());
         szimulalasg.setFocusable(f);
 
         return szimulalasg;
@@ -48,8 +48,8 @@ public class buttons{
         vvisszag.setText("Vissza");
         vvisszag.setFont(new Font(szt,Font.BOLD, vm));
         vvisszag.setFocusable(f);
-        vvisszag.addActionListener((event) -> valasztas.close());
-        vvisszag.addActionListener((event) -> new menu());
+        vvisszag.addActionListener((event) -> Chose.close());
+        vvisszag.addActionListener((event) -> new Menu());
 
         return vvisszag;
     }
@@ -60,7 +60,7 @@ public class buttons{
         sajatg.setText("<html>Saját virtualizáció<br />összeállítása</html>");
         sajatg.setFont(new Font(szt,Font.BOLD, 15));
         sajatg.setFocusable(f);
-        sajatg.addActionListener((event) -> valasztas.close());
+        sajatg.addActionListener((event) -> Chose.close());
         sajatg.addActionListener((event) -> new szimulacio());
         return sajatg;
     }
@@ -71,7 +71,7 @@ public class buttons{
         inditasg.setText("Indítás");
         inditasg.setFont(new Font(szt,Font.BOLD, 15));
         inditasg.setFocusable(f);
-        inditasg.addActionListener((event) -> valasztas.close());
+        inditasg.addActionListener((event) -> Chose.close());
         inditasg.addActionListener((event) -> new szimulacio());
 
         return inditasg;
@@ -85,7 +85,7 @@ public class buttons{
         szvisszag.setFont(new Font(szt,Font.BOLD, vm));
         szvisszag.setFocusable(f);
         szvisszag.addActionListener((event) -> szimulacio.close());
-        szvisszag.addActionListener((event) -> new valasztas());
+        szvisszag.addActionListener((event) -> new Chose());
 
         return szvisszag;
     }
@@ -97,10 +97,10 @@ public class buttons{
         mvisszag.setFont(new Font(szt,Font.BOLD, vm));
         mvisszag.setFocusable(f);
         mvisszag.addActionListener((event) -> szimulacio.close());
-        mvisszag.addActionListener((event) -> new menu());
+        mvisszag.addActionListener((event) -> new Menu());
 
         return mvisszag;
     }
 
-}//vége
+}//end
 
