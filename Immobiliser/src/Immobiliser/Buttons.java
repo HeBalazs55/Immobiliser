@@ -1,7 +1,6 @@
 package Immobiliser;
 
 import java.awt.Font;
-
 import javax.swing.JButton;
 
 public class Buttons {
