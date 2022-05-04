@@ -15,4 +15,4 @@ public class ChoseDraw extends JPanel{
         //x,y,szélesség,magasság,görbítések
         toll.drawRoundRect(475, 25, 600, 650, 50, 50);
     }
-}
+}//end

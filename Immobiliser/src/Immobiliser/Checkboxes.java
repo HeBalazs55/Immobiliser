@@ -22,4 +22,4 @@ public class Checkboxes extends JFrame{
         c2.addActionListener((event) -> Textareas.setTF1(FileRead.elsosor("src\\eros.txt")));
         return c2;
     }
-}
+}//end

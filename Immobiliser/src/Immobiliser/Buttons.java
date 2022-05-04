@@ -61,7 +61,7 @@ public class Buttons {
         sajatg.setFont(new Font(szt,Font.BOLD, 15));
         sajatg.setFocusable(f);
         sajatg.addActionListener((event) -> Chose.close());
-        sajatg.addActionListener((event) -> new szimulacio());
+        sajatg.addActionListener((event) -> new Simulation());
         return sajatg;
     }
 
@@ -72,7 +72,7 @@ public class Buttons {
         inditasg.setFont(new Font(szt,Font.BOLD, 15));
         inditasg.setFocusable(f);
         inditasg.addActionListener((event) -> Chose.close());
-        inditasg.addActionListener((event) -> new szimulacio());
+        inditasg.addActionListener((event) -> new Simulation());
 
         return inditasg;
     }
@@ -84,7 +84,7 @@ public class Buttons {
         szvisszag.setText("Vissza");
         szvisszag.setFont(new Font(szt,Font.BOLD, vm));
         szvisszag.setFocusable(f);
-        szvisszag.addActionListener((event) -> szimulacio.close());
+        szvisszag.addActionListener((event) -> Simulation.close());
         szvisszag.addActionListener((event) -> new Chose());
 
         return szvisszag;
@@ -96,7 +96,7 @@ public class Buttons {
         mvisszag.setText("Vissza a Menübe");
         mvisszag.setFont(new Font(szt,Font.BOLD, vm));
         mvisszag.setFocusable(f);
-        mvisszag.addActionListener((event) -> szimulacio.close());
+        mvisszag.addActionListener((event) -> Simulation.close());
         mvisszag.addActionListener((event) -> new Menu());
 
         return mvisszag;
