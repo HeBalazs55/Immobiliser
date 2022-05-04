@@ -14,9 +14,9 @@ public class Chose {
         ChoseFrame.add(ChoseDraw);
         ChoseFrame.pack();
         ChoseFrame.setLayout(null);
-        ChoseFrame.add(Buttons.VVISSZA());
-        ChoseFrame.add(Buttons.SAJAT());
-        ChoseFrame.add(Buttons.INDITAS());
+        ChoseFrame.add(StaticButtons.VVISSZA());
+        ChoseFrame.add(StaticButtons.SAJAT());
+        ChoseFrame.add(StaticButtons.INDITAS());
         ChoseFrame.add(Checkboxes.C1());
         ChoseFrame.add(Checkboxes.C2());
         ChoseFrame.add(Textareas.TF1());

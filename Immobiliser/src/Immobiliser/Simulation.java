@@ -14,8 +14,8 @@ public class Simulation{
         SimFrame.add(SimD);
         SimFrame .pack();
         SimFrame.setLayout(null);
-        SimFrame.add(Buttons.SZVISSZA());
-        SimFrame.add(Buttons.MENUVISSZA());
+        SimFrame.add(StaticButtons.SZVISSZA());
+        SimFrame.add(StaticButtons.MENUVISSZA());
         SimFrame.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
         SimFrame.setVisible(true); //az ablak megjelenik
     }
