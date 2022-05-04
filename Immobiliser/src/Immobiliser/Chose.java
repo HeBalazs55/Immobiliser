@@ -17,9 +17,9 @@ public class Chose {
         ChoseFrame.add(Buttons.VVISSZA());
         ChoseFrame.add(Buttons.SAJAT());
         ChoseFrame.add(Buttons.INDITAS());
-        ChoseFrame.add(checkboxes.C1());
-        ChoseFrame.add(checkboxes.C2());
-        ChoseFrame.add(textareas.TF1());
+        ChoseFrame.add(Checkboxes.C1());
+        ChoseFrame.add(Checkboxes.C2());
+        ChoseFrame.add(Textareas.TF1());
         ChoseFrame.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
         ChoseFrame.setVisible(true); //az ablak megjelenik
 
