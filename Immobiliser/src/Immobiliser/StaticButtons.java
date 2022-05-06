@@ -31,7 +31,7 @@ public class StaticButtons {
 
         return szimulalasg;
     }
-    */
+
     public static JButton KILEPES(){
         kilepesg = new JButton();
         kilepesg.setBounds(680, 400, 175, 75);
@@ -41,8 +41,10 @@ public class StaticButtons {
         kilepesg.addActionListener((event) -> System.exit(0));
         return kilepesg;
     }
-    //----------------------Választás gombjai---------------------------------
 
+*/
+    //----------------------Választás gombjai---------------------------------
+/*
     public static JButton VVISSZA(){
         vvisszag = new JButton();
         vvisszag.setBounds(510, 615, 80, 40);
@@ -77,7 +79,7 @@ public class StaticButtons {
 
         return inditasg;
     }
-
+*/
     //----------------------Szimuláció gombjai---------------------------------
     public static JButton SZVISSZA(){
         szvisszag = new JButton();

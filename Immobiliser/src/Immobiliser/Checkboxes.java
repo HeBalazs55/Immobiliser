@@ -1,8 +1,9 @@
 package Immobiliser;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JCheckBox;
 
-public class Checkboxes extends JFrame{
+public class Checkboxes extends JFrame {
 
     protected static JCheckBox c1;
     protected static JCheckBox c2;
