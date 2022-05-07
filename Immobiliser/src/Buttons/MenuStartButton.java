@@ -6,7 +6,7 @@ import Immobiliser.Menu;
 import javax.swing.JButton;
 import java.awt.Font;
 
-public class MenuStartButton extends Buttons {
+public class MenuStartButton extends Button {
 
     public MenuStartButton(String na, Integer[] bo, String te, Boolean f) {
         super(na, bo, te, f);

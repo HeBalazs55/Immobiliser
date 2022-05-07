@@ -4,13 +4,13 @@ import javax.swing.JButton;
 import java.awt.Font;
 
 
-abstract public class Buttons extends JButton{
+abstract public class Button extends JButton{
     private String name;
     private Integer[] bounds;
     private String text;
     private Boolean focusable;
 
-    public Buttons(String na, Integer[] bo, String te, Boolean f){
+    public Button(String na, Integer[] bo, String te, Boolean f){
         name = na; bounds = bo; text = te; focusable = f;
 
     }

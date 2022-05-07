@@ -1,24 +1,24 @@
 package Buttons;
 
+import Immobiliser.Chose;
 import Immobiliser.Simulation;
-import Immobiliser.Menu;
 
 import javax.swing.JButton;
 import java.awt.Font;
 
-public class SimulationBackToMenuButton extends Buttons {
+public class SimBackButton extends Button {
 
-    public SimulationBackToMenuButton(String na, Integer[] bo, String te, Boolean f) {
+    public SimBackButton(String na, Integer[] bo, String te, Boolean f) {
         super(na, bo, te, f);
     }
     public JButton letrehoz(){
         JButton gomb = new JButton();
         gomb.setBounds(getBound1(), getBound2(), getBound3(), getBound4());
         gomb.setText(getText());
-        gomb.setFont(new Font("Comic Sans",Font.BOLD, 20));
+        gomb.setFont(new Font("Comic Sans",Font.BOLD, 14));
         gomb.setFocusable(getFocusable());
         gomb.addActionListener((event) -> Simulation.close());
-        gomb.addActionListener((event) -> new Menu());
+        gomb.addActionListener((event) -> new Chose());
         return gomb;
     }
-}
+}//end

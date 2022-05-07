@@ -6,7 +6,7 @@ import Immobiliser.Simulation;
 import javax.swing.JButton;
 import java.awt.Font;
 
-public class ChoseStartButton extends Buttons {
+public class ChoseStartButton extends Button {
 
     public ChoseStartButton(String na, Integer[] bo, String te, Boolean f) {
         super(na, bo, te, f);

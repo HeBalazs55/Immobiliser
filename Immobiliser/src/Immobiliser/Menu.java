@@ -14,7 +14,7 @@ public class Menu{
 
 
     public Menu(){
-        JFrame MenuFrame = new JFrame("Indításgátló");
+        MenuFrame = new JFrame("Indításgátló");
         MenuDraw MenuR = new MenuDraw();
 
         //Start gomb
