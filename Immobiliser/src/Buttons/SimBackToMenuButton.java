@@ -17,7 +17,7 @@ public class SimBackToMenuButton extends Button {
         gomb.setText(getText());
         gomb.setFont(new Font("Comic Sans",Font.BOLD, 14));
         gomb.setFocusable(getFocusable());
-        gomb.addActionListener((event) -> Simulation.close());
+        //gomb.addActionListener((event) -> Simulation.close());
         gomb.addActionListener((event) -> new Menu());
         return gomb;
     }

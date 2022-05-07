@@ -10,15 +10,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Area;
 
-public class Simulation  implements ActionListener{
-    SimulationDraw SimD;
-    static JFrame SimFrame;
+public class Simulation  extends JFrame implements ActionListener{
+    private SimulationDraw SimD;//Panel
     String hozza = "Hozzáad";
     String torol = "Töröl";
 
+    //Képek
     JLabel motorjobb;
     JLabel motorbal;
+    JLabel alarmon;
+    JLabel alarmoff;
+    JLabel speedometer;
+    JLabel keysensor;
+    JLabel carkey;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
     //##########################
@@ -83,12 +89,13 @@ public class Simulation  implements ActionListener{
     Integer[] C12Bounds = {1390, 680, 85, 15};
     Checkbox C12 = new Checkbox(torol, C12Bounds);
     JCheckBox AlarmNo;
-
     //--------------------------------------------------------------------------------------------------------------------------------------------
     public Simulation(){
-        SimFrame = new JFrame("Indításgátló");
         SimD = new SimulationDraw();
 
+        //#############################################
+        //####Gombra vagy checkboxra aktiváló képek####
+        //#############################################
         ImageIcon motorsoundjobb = new ImageIcon("motorsound1.png");
         motorjobb = new JLabel();
         motorjobb.setIcon(motorsoundjobb);
@@ -102,6 +109,51 @@ public class Simulation  implements ActionListener{
         motorbal.setEnabled(false);
         motorbal.setBounds(890,280, 48,90);
         motorbal.setVisible(true);
+
+        //----------------------------------------------------------------------------------
+        ImageIcon AlarmonImage = new ImageIcon("alarmon.png");
+        alarmon = new JLabel();
+        alarmon.setIcon(AlarmonImage);
+        alarmon.setEnabled(false);
+        alarmon.setBounds(130,100, 112,112);
+        alarmon.setVisible(true);
+
+        ImageIcon AlarmoffImage = new ImageIcon("alarmoff.png");
+        alarmoff = new JLabel();
+        alarmoff.setIcon(AlarmoffImage);
+        alarmoff.setEnabled(false);
+        alarmoff.setBounds(242,100, 112,112);
+        alarmoff.setVisible(true);
+
+        //----------------------------------------------------------------------------------
+
+        ImageIcon SpeedometerImage = new ImageIcon("speedometer.png");
+        speedometer = new JLabel();
+        speedometer.setIcon(SpeedometerImage);
+        speedometer.setEnabled(false);
+        speedometer.setBounds(720, 95, 128, 128);
+        speedometer.setVisible(true);
+
+        //----------------------------------------------------------------------------------
+        ImageIcon KeysensorImage = new ImageIcon("keysensor.png");
+        keysensor = new JLabel();
+        keysensor.setIcon(KeysensorImage);
+        //keysensor.setEnabled(false);
+        keysensor.setBounds(120, 600, 56,74);
+        keysensor.setVisible(false);
+
+        ImageIcon CarKeyImage = new ImageIcon("carkey.png");
+        carkey = new JLabel();
+        carkey.setIcon(CarKeyImage);
+        //carkey.setEnabled(false);
+        carkey.setBounds(250,500,60,100);
+        carkey.setVisible(true);
+
+        //----------------------------------------------------------------------------------
+
+
+
+
         //--------------------------------------------------------------------------------------------------------------------------------------------
         //######Gombok létrehozása#######
         gyujtas = IB.letrehoz();
@@ -153,33 +205,44 @@ public class Simulation  implements ActionListener{
         //###################################
         //###SZIMULÁCIÓS FRAME ÖSSZERAKÁSA###
         //###################################
-        SimFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Ha jobb felül az x-re kattintunk bezáródik az ablak, nem csak tálcázódik
-        SimFrame.add(SimD);
-        SimFrame.pack();
-        SimFrame.setLayout(null);
-        SimFrame.add(gyujtas);
-        SimFrame.add(inditas);
-        SimFrame.add(CodeYes);
-        SimFrame.add(CodeNo);
-        SimFrame.add(KeyYes);
-        SimFrame.add(KeyNo);
-        SimFrame.add(FingerYes);
-        SimFrame.add(FingerNo);
-        SimFrame.add(PhoneYes);
-        SimFrame.add(PhoneNo);
-        SimFrame.add(MoveYes);
-        SimFrame.add(MoveNo);
-        SimFrame.add(AlarmYes);
-        SimFrame.add(AlarmNo);
-        SimFrame.add(BB.letrehoz());
-        SimFrame.add(BM.letrehoz());
-        SimFrame.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
-        SimFrame.setVisible(true); //az ablak megjelenik
-        SimFrame.add(motorjobb);
-        SimFrame.add(motorbal);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        //this.setSize(1540,800);
+        this.add(SimD);
+        this.pack();
+        this.setLayout(null);
+        this.add(keysensor);
+        this.add(gyujtas);
+        this.add(inditas);
+        this.add(BB.letrehoz());
+        this.add(BM.letrehoz());
+        this.add(CodeYes);
+        this.add(CodeNo);
+        this.add(KeyYes);
+        this.add(KeyNo);
+        this.add(FingerYes);
+        this.add(FingerNo);
+        this.add(PhoneYes);
+        this.add(PhoneNo);
+        this.add(MoveYes);
+        this.add(MoveNo);
+        this.add(AlarmYes);
+        this.add(AlarmNo);
+        this.add(motorjobb);
+        this.add(motorbal);
+        this.add(alarmon);
+        this.add(alarmoff);
+        this.add(speedometer);
+        this.add(carkey);
+        this.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
+
+
+
+
+
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------
-    public static void close(){SimFrame.dispose();}
+    //public static void close(){SimFrame.dispose();}
     //--------------------------------------------------------------------------------------------------------------------------------------------
     public void actionPerformed(ActionEvent e){
         //Gyújtás gomb parancsok
@@ -199,6 +262,15 @@ public class Simulation  implements ActionListener{
             if(gyujtas.getBackground() == zold){
                 motorjobb.setEnabled(true);
                 motorbal.setEnabled(true);
+                if(AlarmYes.isSelected()){
+                alarmon.setEnabled(true);
+                alarmoff.setEnabled(false);
+                }
+            }else{
+                if (AlarmYes.isSelected()) {
+                    alarmon.setEnabled(false);
+                    alarmoff.setEnabled(true);
+                }
             }
         }
         //------------------------------------------------------
@@ -212,9 +284,13 @@ public class Simulation  implements ActionListener{
         //------------------------------------------------------
         if(e.getSource()==KeyYes){
             KeyNo.setSelected(false);
+            keysensor.setVisible(true);
+            carkey.setVisible(true);
         }
         if(e.getSource()==KeyNo){
             KeyYes.setSelected(false);
+            keysensor.setVisible(false);
+
         }
         //------------------------------------------------------
         if(e.getSource()==FingerYes){
@@ -233,16 +309,29 @@ public class Simulation  implements ActionListener{
         //------------------------------------------------------
         if(e.getSource()==MoveYes){
             MoveNo.setSelected(false);
+            speedometer.setEnabled(true);
         }
         if(e.getSource()==MoveNo){
             MoveYes.setSelected(false);
+            speedometer.setEnabled(false);
         }
         //------------------------------------------------------
         if(e.getSource()==AlarmYes){
             AlarmNo.setSelected(false);
+            alarmon.setEnabled(true);
+            alarmoff.setEnabled(false);
         }
         if(e.getSource()==AlarmNo){
             AlarmYes.setSelected(false);
+            alarmon.setEnabled(false);
+            alarmoff.setEnabled(false);
         }
     }
+    public Boolean checkCollision(JLabel a, JLabel b){
+        Area AreaA = new Area(a.getBounds());
+        Area AreaB = new Area(b.getBounds());
+
+        return AreaA.intersects(AreaB.getBounds2D());
+    }
+
 }//end
