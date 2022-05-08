@@ -19,6 +19,7 @@ public class Checkbox {
     public JCheckBox letrehoz(){
         JCheckBox c = new JCheckBox(getText());
         c.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        c.setFocusable(false);
         return c;
     }
 }//end

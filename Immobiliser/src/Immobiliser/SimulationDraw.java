@@ -9,6 +9,8 @@ public class SimulationDraw extends JPanel{
 
     SimulationDraw(){
         this.setPreferredSize(new Dimension(1540,800)); //szélesség-hosszúság
+        engine = new ImageIcon("engine.png").getImage();
+        battery = new ImageIcon("battery.png").getImage();
     }
 
     public void paint(Graphics g){

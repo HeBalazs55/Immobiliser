@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 public class ChoseDraw extends JPanel{
 
     ChoseDraw(){
-        this.setPreferredSize(new Dimension(1920,1080)); //szélesség-hosszúság
+        this.setPreferredSize(new Dimension(1540,800)); //szélesség-hosszúság
     }
     public void paint(Graphics g){
         Graphics2D toll = (Graphics2D) g;

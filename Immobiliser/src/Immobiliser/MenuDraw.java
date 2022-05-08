@@ -7,7 +7,7 @@ public class MenuDraw extends JPanel{
 
     MenuDraw(){
 
-        this.setPreferredSize(new Dimension(1920,1080)); //szélesség-hosszúság
+        this.setPreferredSize(new Dimension(1540,800)); //szélesség-hosszúság
     }
 
 

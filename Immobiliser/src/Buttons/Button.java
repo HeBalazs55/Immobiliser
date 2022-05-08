@@ -5,10 +5,10 @@ import java.awt.Font;
 
 
 abstract public class Button extends JButton{
-    private String name;
-    private Integer[] bounds;
-    private String text;
-    private Boolean focusable;
+    final private String name;
+    final private Integer[] bounds;
+    final private String text;
+    final private Boolean focusable;
 
     public Button(String na, Integer[] bo, String te, Boolean f){
         name = na; bounds = bo; text = te; focusable = f;
@@ -22,7 +22,7 @@ abstract public class Button extends JButton{
     public String getText() {return text;}
     public Boolean getFocusable() {return focusable;}
     public JButton letrehoz(){
-        JButton gomb = new JButton();
+        JButton gomb = new JButton(name);
         gomb.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
         gomb.setText(text);
         gomb.setFont(new Font("Comic Sans",Font.BOLD, 20));
