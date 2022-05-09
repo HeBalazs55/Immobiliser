@@ -1,21 +1,26 @@
 package Immobiliser;
 
 import Buttons.*;
-import Checkboxes.*;
+import Checkboxes.Checkbox;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Chose extends JFrame implements ActionListener {
     ChoseDraw ChoseDraw;
+    FileRead Reader = new FileRead();
+
+    Textareas TF1 = new Textareas();
+    JTextArea TextA;
 
     //-----------------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------CHECKBOXOK--------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------------------
     // Globálisan létre hozzuk a Checkboxokat
     Integer[] C1Bounds = {630,200,130,20};
-    Checkbox C1= new Checkbox("Weak védelem", C1Bounds);
+    Checkbox C1= new Checkbox("Gyenge védelem", C1Bounds);
     JCheckBox Weak;
 
     Integer[] C2Bounds = {630,250,130,20};
@@ -42,6 +47,7 @@ public class Chose extends JFrame implements ActionListener {
 
     public Chose(){
         ChoseDraw = new ChoseDraw();
+        TextA = TF1.letrehoz();
         //-----------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------GOMBOK----------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------------
@@ -53,6 +59,7 @@ public class Chose extends JFrame implements ActionListener {
 
         BackToMenuButton = BMB.letrehoz();
         BackToMenuButton.addActionListener(this);
+        BackToMenuButton.setFont(new Font("Comic Sans", Font.BOLD, 14));
         //-----------------------------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------CHECKBOXOK--------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------------
@@ -74,28 +81,46 @@ public class Chose extends JFrame implements ActionListener {
         this.add(BackToMenuButton);
         this.add(Weak);
         this.add(Strong);
-        this.add(Textareas.TF1());
+        this.add(TextA);
         this.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
         this.setVisible(true); //az ablak megjelenik
     }
-    public void close(){dispose();}
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==Weak){
+            TextA.setText("");
+            String[] komponensek = Reader.FirstRow("src\\Weak.txt");
             Strong.setSelected(false);
-            Textareas.setTF1(FileRead.elsosor("src\\Weak.txt"));
+            for (String s : komponensek) {
+                TextA.append(s + "\n");
+            }
         }
         if(e.getSource()==Strong){
+            TextA.setText("");
+            String[] komponensek = Reader.FirstRow("src\\Strong.txt");
             Weak.setSelected(false);
-            Textareas.setTF1(FileRead.elsosor("src\\Strong.txt"));
+            for (String s : komponensek) {
+                TextA.append(s + "\n");
+            }
         }
-        if(e.getSource()==StartButton){
-            dispose(); new Simulation();
+        if(e.getSource()==StartButton) {
+            if (Weak.isSelected()) {
+                Reader.ComponentYesNo("src\\Weak.txt");
+                dispose();
+                new Simulation();
+            } else if (Strong.isSelected()) {
+                Reader.ComponentYesNo("src\\Strong.txt");
+                dispose();
+                new Simulation();
+            }
         }
-        if(e.getSource()==OwnButton){
-            dispose(); new Simulation();
+        if (e.getSource() == OwnButton) {
+            dispose();
+            new Simulation();
         }
-        if(e.getSource()==BackToMenuButton){
-            dispose(); new Menu();
+
+        if (e.getSource() == BackToMenuButton) {
+            dispose();
+            new Menu();
         }
-    }
+    }//ActionPerformer end
 }//end

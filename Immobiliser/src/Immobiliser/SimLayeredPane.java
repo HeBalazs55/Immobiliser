@@ -29,6 +29,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     File EngineSoundFile = new File("motorsound.wav");
     AudioInputStream EngineSoundStream;
     Clip clip;
+    FloatControl gainControl;
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -151,7 +152,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     JCheckBox AlarmNo;
 
     //##################################################################################################################
-    //########################################----MAGA A LAYER DEKLARÁLÁSA----##########################################
+    //########################################----MAGA A LAYER DEKLARALASA----##########################################
     //##################################################################################################################
     SimLayeredPane(){
         {
@@ -177,6 +178,8 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-15.0f);
 
         //#################################
         //#############HÁTTÉR##############
@@ -340,7 +343,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmNo.addActionListener(this);
 
         //##################################################################################################################
-        //################################----OBJECTEK HOZZÁADÁSA A LAYEREDPANE-hez----#####################################
+        //################################----OBJECTEK HOZZAADASA A LAYEREDPANE-hez----#####################################
         //##################################################################################################################
         this.add(Background, JLayeredPane.DEFAULT_LAYER);
         this.add(Battery, JLayeredPane.PALETTE_LAYER);
@@ -380,8 +383,8 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         this.addMouseMotionListener(dragListener);
 
 
-        EnabledList = new ArrayList<Boolean>();
-        DoneList = new ArrayList<Boolean>();
+        EnabledList = new ArrayList<>();
+        DoneList = new ArrayList<>();
 
     }
 
@@ -520,7 +523,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         if(e.getSource()==MoveNo){
             MoveYes.setSelected(false);
             Speedometer.setVisible(false);
-            SpeedTimer.cancel();
+            SpeedTimer.purge();
             SpeedDone = false;
         }
         //------------------------------------------------------
