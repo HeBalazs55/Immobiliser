@@ -2,6 +2,7 @@ package Immobiliser;
 
 import Buttons.SimCodeSubmitButton;
 import Buttons.SimIgnitionButton;
+import Buttons.SimPhoneSubmitButton;
 import Buttons.SimStartButton;
 import Checkboxes.Checkbox;
 
@@ -9,39 +10,71 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Area;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.sound.sampled.*;
 
 public class SimLayeredPane extends JLayeredPane implements ActionListener{
     final String hozza = "Hozzáad";
     final String torol = "Töröl";
-    protected Point prevPt; // előző pont
-    protected Point currentLocation;
+
     private int rosszinditas = 0;
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel Battery; JLabel Motor; JLabel Background; JLabel MotorRight; JLabel MotorLeft;
 
+    File EngineSoundFile = new File("motorsound.wav");
+    AudioInputStream EngineSoundStream;
+    Clip clip;
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     JTextField CarCode; String carcodestring = ""; Integer carcodeint = 0; Boolean CodeDone = false;
 
-    public int setCarCode(){return rosszinditas+=1;}
-
-    public void deletCarCode(){rosszinditas = 0;}
+    Integer[] CodeSubmitBounds = {440, 540, 60,20};
+    SimCodeSubmitButton CSB = new SimCodeSubmitButton("Kód", CodeSubmitBounds, "Kód", false);
+    JButton CodeSubmit;
 
     public Boolean getCarCode(int code) {
         return code == (1234);
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel CarKey; Boolean KeyDone = false;
+    ImageIcon CarKeyImage = new ImageIcon("CarKey.png");
+    Point KeyImageCorner;
+    Point prevPt;
+
     JLabel KeySensor;
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     static JLabel Finger; static JLabel FingerPass; Boolean FingerDone = false;
     public static void setFinger(Boolean f){Finger.setVisible(f);}
 
     public static void setFingerPass(Boolean f){FingerPass.setVisible(f);}
     //--------------------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel Phone; Boolean PhoneDone = false;
+    Integer[] PhoneSubmitBounds = {885, 655, 60,20};
+    SimPhoneSubmitButton PSB = new SimPhoneSubmitButton("Jóváhagy", PhoneSubmitBounds, "Start", false);
+    JButton PhoneSubmit;
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel Speedometer; Boolean SpeedDone = false;
+    Timer SpeedTimer = new Timer();
+
+    TimerTask SpeedTask = new TimerTask() {
+        @Override
+        public void run() {
+            SpeedDone = true;
+        }
+    };
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel AlarmOn; JLabel AlarmOff;
     
@@ -63,9 +96,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     SimStartButton SB = new SimStartButton("Indítás", StartBounds, "Start", false);
     JButton inditas;
 
-    Integer[] CodeSubmitBounds = {440, 540, 60,20};
-    SimCodeSubmitButton CSB = new SimCodeSubmitButton("Kód", CodeSubmitBounds, "Kód", false);
-    JButton CodeSubmit;
+
 
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -123,6 +154,30 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     //########################################----MAGA A LAYER DEKLARÁLÁSA----##########################################
     //##################################################################################################################
     SimLayeredPane(){
+        {
+            try {
+                EngineSoundStream = AudioSystem.getAudioInputStream(EngineSoundFile);
+            } catch (UnsupportedAudioFileException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        {
+            try {
+                clip = AudioSystem.getClip();
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            clip.open(EngineSoundStream);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         //#################################
         //#############HÁTTÉR##############
         //#################################
@@ -137,6 +192,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Motor.setOpaque(true);
         Motor.setBounds(930, 260, 144,144);
         Motor.setVisible(true);
+
 
         ImageIcon BatteryImage = new ImageIcon("battery.png");
         Battery = new JLabel(BatteryImage);
@@ -166,6 +222,11 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         CarCode.setBounds(430,520,80,20);
         CarCode.setVisible(false);
 
+        CodeSubmit = CSB.letrehoz();
+        CodeSubmit.setFont(new Font("Comic Sans", Font.BOLD, 10));
+        CodeSubmit.addActionListener(this);
+        CodeSubmit.setVisible(false);
+
         //----------------------------------------------------------------------------------
 
         ImageIcon KeySensorImage = new ImageIcon("keysensor.png");
@@ -174,16 +235,15 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         KeySensor.setBounds(250,520,56,74);
         KeySensor.setVisible(false);
 
-        ClickListener clickListener = new ClickListener();
-        DragListener dragListener = new DragListener();
-        ImageIcon CarKeyImage = new ImageIcon("CarKey.png");
+
+
         CarKey = new JLabel(CarKeyImage);
         CarKey.setOpaque(true);
         CarKey.setBounds(120, 600, 60,100);
         CarKey.setVisible(false);
-        CarKey.addMouseListener(clickListener);
-        CarKey.addMouseMotionListener(dragListener);
-        currentLocation = CarKey.getLocation();
+        KeyImageCorner = new Point(0,0);
+        ClickListener clickListener = new ClickListener();
+        DragListener dragListener = new DragListener();
 
         //----------------------------------------------------------------------------------
 
@@ -192,6 +252,11 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Phone.setOpaque(true);
         Phone.setBounds(850,520,125,223);
         Phone.setVisible(false);
+
+        PhoneSubmit = PSB.letrehoz();
+        PhoneSubmit.setFont(new Font("Comic Sans", Font.BOLD, 10));
+        PhoneSubmit.addActionListener(this);
+        PhoneSubmit.setVisible(false);
 
         //----------------------------------------------------------------------------------
 
@@ -214,6 +279,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Speedometer.setOpaque(true);
         Speedometer.setBounds(720, 95, 128, 128);
         Speedometer.setVisible(false);
+
 
         //----------------------------------------------------------------------------------
         ImageIcon AlarmOnImage = new ImageIcon("AlarmOn.png");
@@ -240,11 +306,6 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
 
         inditas = SB.letrehoz();
         inditas.addActionListener(this);
-
-        CodeSubmit = CSB.letrehoz();
-        CodeSubmit.setFont(new Font("Comic Sans", Font.BOLD, 10));
-        CodeSubmit.addActionListener(this);
-        CodeSubmit.setVisible(false);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
         //########Checkboxok létrehozása##########
@@ -306,6 +367,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
 
         //-------Képek hozzáadása a LayeredPane-hez------------
         this.add(CarCode, JLayeredPane.PALETTE_LAYER);
+        this.add(PhoneSubmit, JLayeredPane.PALETTE_LAYER);
         this.add(Finger, JLayeredPane.PALETTE_LAYER);
         this.add(FingerPass, JLayeredPane.PALETTE_LAYER);
         this.add(Phone, JLayeredPane.PALETTE_LAYER);
@@ -314,13 +376,33 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         this.add(Speedometer, JLayeredPane.PALETTE_LAYER);
         this.add(AlarmOn, JLayeredPane.PALETTE_LAYER);
         this.add(AlarmOff, JLayeredPane.PALETTE_LAYER);
+        this.addMouseListener(clickListener);
+        this.addMouseMotionListener(dragListener);
+
 
         EnabledList = new ArrayList<Boolean>();
         DoneList = new ArrayList<Boolean>();
+
     }
 
+    private class ClickListener extends MouseAdapter {
 
 
+        public void mousePressed(MouseEvent e){
+            prevPt = e.getPoint();
+        }
+    }
+    private class DragListener extends MouseMotionAdapter {
+        public void mouseDragged(MouseEvent e){
+            Point currentPt = e.getPoint();
+            KeyImageCorner.translate(
+                    (int)(currentPt.getX()-prevPt.getX()),
+                    (int)(currentPt.getY()-prevPt.getY())
+            );
+            prevPt = currentPt;
+            CarKey.setLocation(e.getPoint().x, e.getPoint().y);
+        }
+    }
 
     //##################################################################################################################
     //#############################################----ACTION PERFORMER----#############################################
@@ -335,6 +417,10 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 if(FingerPass.isVisible()){
                     FingerDone = true;
                 }
+                if(checkCollision(CarKey, KeySensor)){
+                    KeyDone = true;
+                }
+
                 EnabledList.clear();
                 EnabledList.add(CarCode.isVisible());
                 EnabledList.add(CarKey.isVisible());
@@ -363,14 +449,18 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 if(EnabledList.equals(DoneList)){
                     MotorLeft.setVisible(true);
                     MotorRight.setVisible(true);
+                    clip.start();
                 }
             }
         }
-
+        //A feladatok gombjai
         if(e.getSource()==CodeSubmit){
             carcodestring = CarCode.getText();
             carcodeint = Integer.parseInt(carcodestring);
             if(getCarCode(carcodeint)){CodeDone = true; CarCode.setEditable(false);}
+        }
+        if(e.getSource()==PhoneSubmit){
+            PhoneDone = true;
         }
         //------------------------------------------------------
         //Chechbox parancsok
@@ -390,6 +480,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
             KeyNo.setSelected(false);
             KeySensor.setVisible(true);
             CarKey.setVisible(true);
+            CarKey.setBounds(120, 600, 60,100);
         }
         if(e.getSource()==KeyNo){
             KeyYes.setSelected(false);
@@ -412,20 +503,24 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         if(e.getSource()==PhoneYes){
             PhoneNo.setSelected(false);
             Phone.setVisible(true);
+            PhoneSubmit.setVisible(true);
         }
         if(e.getSource()==PhoneNo){
             PhoneYes.setSelected(false);
             Phone.setVisible(false);
+            PhoneSubmit.setVisible(false);
             PhoneDone = false;
         }
         //------------------------------------------------------
         if(e.getSource()==MoveYes){
             MoveNo.setSelected(false);
             Speedometer.setVisible(true);
+            SpeedTimer.schedule(SpeedTask, 5*1000);
         }
         if(e.getSource()==MoveNo){
             MoveYes.setSelected(false);
             Speedometer.setVisible(false);
+            SpeedTimer.cancel();
             SpeedDone = false;
         }
         //------------------------------------------------------
@@ -444,34 +539,10 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
             AlarmOff.setEnabled(false);
         }
     }
-    /*
     public Boolean checkCollision(JLabel a, JLabel b){
         Area AreaA = new Area(a.getBounds());
         Area AreaB = new Area(b.getBounds());
-
         return AreaA.intersects(AreaB.getBounds2D());
     }
-    */
 
-    private class ClickListener extends MouseAdapter {
-        public void mousePressed(MouseEvent e){
-            prevPt = e.getPoint();
-        }
-    }
-    private class DragListener extends MouseMotionAdapter {
-        public void mouseDragged(MouseEvent e){
-            Point currentPt = e.getPoint();
-            currentLocation.x = (int) currentPt.getX();
-            currentLocation.y = (int) currentPt.getY();
-
-            CarKey.setLocation(currentLocation);
-                /*
-                imageCorner.translate(
-                        (int)(currentPt.getX()-prevPt.getX()),
-                        (int)(currentPt.getY()-prevPt.getY())
-                );
-                prevPt = currentPt;
-                */
-            }
-    }
 }//end

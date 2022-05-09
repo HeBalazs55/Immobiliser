@@ -7,69 +7,95 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Chose implements ActionListener {
+public class Chose extends JFrame implements ActionListener {
     ChoseDraw ChoseDraw;
-    static JFrame ChoseFrame;
 
-    //----------CHECKBOXOK------------
-    Integer C1Bounds[] = {630,200,130,20};
-    Checkbox C1= new Checkbox("Gyenge védelem", C1Bounds);
-    JCheckBox gyenge;
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------CHECKBOXOK--------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------
+    // Globálisan létre hozzuk a Checkboxokat
+    Integer[] C1Bounds = {630,200,130,20};
+    Checkbox C1= new Checkbox("Weak védelem", C1Bounds);
+    JCheckBox Weak;
 
-    Integer C2Bounds[] = {630,250,130,20};
+    Integer[] C2Bounds = {630,250,130,20};
     Checkbox C2 = new Checkbox("Erős védelem", C2Bounds);
-    JCheckBox eros;
+    JCheckBox Strong;
+
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------GOMBOK----------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //Globálisan létre hozzuk a Gombokat
+    Integer[] Startbounds = {810, 210, 110, 50};
+    ChoseStartButton SB = new ChoseStartButton("Indítás", Startbounds, "Indítás", false);
+    JButton StartButton;
+
+
+    Integer[] OwnStartbounds = {660, 480, 200, 100};
+    ChoseOwnButton OB = new ChoseOwnButton("Sájat", OwnStartbounds, "<html>Saját csomag<br />összeállítása</html>", false);
+    JButton OwnButton;
+
+
+    Integer[] BackToMenuBounds = {510, 615, 80, 40};
+    ChoseBackButton BMB = new ChoseBackButton("Vissza", BackToMenuBounds, "Vissza", false);
+    JButton BackToMenuButton;
 
     public Chose(){
-        ChoseFrame = new JFrame("Indításgátló");
         ChoseDraw = new ChoseDraw();
+        //-----------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------GOMBOK----------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------
+        StartButton = SB.letrehoz();
+        StartButton.addActionListener(this);
 
-        //---------GOMBOK------------
-        //----Előre összeállított szim. indítása gomb
-        Integer Startbounds[] = {810, 210, 110, 50};
-        ChoseStartButton SB = new ChoseStartButton("Indítás", Startbounds, "Indítás", false);
+        OwnButton = OB.letrehoz();
+        OwnButton.addActionListener(this);
 
-        //----Saját szim. összeállítása gomb
-        Integer OwnStartbounds[] = {660, 480, 200, 100};
-        ChoseOwnButton OB = new ChoseOwnButton("Sajat", OwnStartbounds, "<html>Saját csomag<br />összeállítása</html>", false);
+        BackToMenuButton = BMB.letrehoz();
+        BackToMenuButton.addActionListener(this);
+        //-----------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------CHECKBOXOK--------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------
+        Weak = C1.letrehoz();
+        Weak.addActionListener(this);
 
-        //----Vissza lépés a menübe gomb
-        Integer BackToMenuBounds[] = {510, 615, 80, 40};
-        ChoseBackButton BB = new ChoseBackButton("Vissza", BackToMenuBounds, "Vissza", false);
-
-        //----------CHECKBOXOK------------
-        gyenge = C1.letrehoz();
-        gyenge.addActionListener(this);
-
-        eros = C2.letrehoz();
-        eros.addActionListener(this);
-
-        //---------Választás Frame összerakása-----------
-        ChoseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Ha jobb felül az x-re kattintunk bezáródik az ablak, nem csak tálcázódik
-        ChoseFrame.add(ChoseDraw);
-        ChoseFrame.pack();
-        ChoseFrame.setLayout(null);
-        ChoseFrame.add(SB.letrehoz());
-        ChoseFrame.add(OB.letrehoz());
-        ChoseFrame.add(BB.letrehoz());
-        ChoseFrame.add(gyenge);
-        ChoseFrame.add(eros);
-        ChoseFrame.add(Textareas.TF1());
-        ChoseFrame.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
-        ChoseFrame.setVisible(true); //az ablak megjelenik
+        Strong = C2.letrehoz();
+        Strong.addActionListener(this);
+        //-----------------------------------------------------------------------------------------------------------------------------
+        //----------------------------------------------------Választás Frame összerakása----------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Ha jobb felül az x-re kattintunk bezáródik az ablak, nem csak tálcázódik.
+        this.setTitle("Indításgátló"); //A Frame neve. Ez jelenik meg bal felül ha az ablak megnyílik.
+        this.add(ChoseDraw);
+        this.pack(); //Frame és JPanel illeszkedését intéző parancs
+        this.setLayout(null); //Elrendezés a frame-en.
+        this.add(StartButton);
+        this.add(OwnButton);
+        this.add(BackToMenuButton);
+        this.add(Weak);
+        this.add(Strong);
+        this.add(Textareas.TF1());
+        this.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
+        this.setVisible(true); //az ablak megjelenik
     }
-    public static void close(){
-        ChoseFrame.dispose();
-    }
-
+    public void close(){dispose();}
     public void actionPerformed(ActionEvent e){
-        if(e.getSource()==gyenge){
-            eros.setSelected(false);
-            Textareas.setTF1(FileRead.elsosor("src\\gyenge.txt"));
+        if(e.getSource()==Weak){
+            Strong.setSelected(false);
+            Textareas.setTF1(FileRead.elsosor("src\\Weak.txt"));
         }
-        if(e.getSource()==eros){
-            gyenge.setSelected(false);
-            Textareas.setTF1(FileRead.elsosor("src\\eros.txt"));
+        if(e.getSource()==Strong){
+            Weak.setSelected(false);
+            Textareas.setTF1(FileRead.elsosor("src\\Strong.txt"));
+        }
+        if(e.getSource()==StartButton){
+            dispose(); new Simulation();
+        }
+        if(e.getSource()==OwnButton){
+            dispose(); new Simulation();
+        }
+        if(e.getSource()==BackToMenuButton){
+            dispose(); new Menu();
         }
     }
 }//end

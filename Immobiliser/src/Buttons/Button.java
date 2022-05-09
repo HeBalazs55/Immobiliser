@@ -3,7 +3,6 @@ package Buttons;
 import javax.swing.JButton;
 import java.awt.Font;
 
-
 abstract public class Button extends JButton{
     final private String name;
     final private Integer[] bounds;
@@ -12,7 +11,6 @@ abstract public class Button extends JButton{
 
     public Button(String na, Integer[] bo, String te, Boolean f){
         name = na; bounds = bo; text = te; focusable = f;
-
     }
     public String getName(){return name;}
     public Integer getBound1() {return bounds[0];}
