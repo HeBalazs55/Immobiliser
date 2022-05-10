@@ -12,7 +12,6 @@ import java.awt.event.*;
 import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,7 +37,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
-    JLabel Battery; JLabel Motor; JLabel Background; JLabel MotorRight; JLabel MotorLeft;
+    JLabel Battery; JLabel Motor; JLabel Background; JLabel EngineRight; JLabel EngineLeft;
 
     File EngineSoundFile = new File("motorsound.wav");
     AudioInputStream EngineSoundStream;
@@ -104,12 +103,12 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     //Gy�jt�s gomb deklar�l�sa
     Integer[] IgnitionBounds = {280, 275, 100, 40};
     SimIgnitionButton IB = new SimIgnitionButton("Gyújtás", IgnitionBounds, "Gyújtás", false);
-    JButton gyujtas;
+    JButton Ignition;
 
     //Ind�t�s gomb deklar�l�sa
     Integer[] StartBounds = {280, 335, 100, 40};
     SimStartButton SB = new SimStartButton("Indítás", StartBounds, "Start", false);
-    JButton inditas;
+    JButton EngineStart;
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
     //##################################################################################################################
@@ -163,7 +162,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     JCheckBox AlarmNo;
 
     //##################################################################################################################
-    //########################################----MAGA A LAYER DEKLARALASA----##########################################
+    //#############################################----LAYERED PANE----#################################################
     //##################################################################################################################
     SimLayeredPane(){
         //#################################
@@ -192,17 +191,17 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         //#############################################
         //####Gombra vagy checkboxra aktivalodo kepek####
         //#############################################
-        ImageIcon motorsoundjobb = new ImageIcon("motorsound1.png");
-        MotorRight = new JLabel(motorsoundjobb);
-        MotorRight.setOpaque(true);
-        MotorRight.setBounds(1070,280, 48,90);
-        MotorRight.setVisible(false);
+        ImageIcon EngineSoundRight = new ImageIcon("motorsound1.png");
+        EngineRight = new JLabel(EngineSoundRight);
+        EngineRight.setOpaque(true);
+        EngineRight.setBounds(1070,280, 48,90);
+        EngineRight.setVisible(false);
 
-        ImageIcon motorsoundbal = new ImageIcon("motorsound2.png");
-        MotorLeft = new JLabel(motorsoundbal);
-        MotorLeft.setOpaque(true);
-        MotorLeft.setBounds(890,280, 48,90);
-        MotorLeft.setVisible(false);
+        ImageIcon EngineSoundLeft = new ImageIcon("motorsound2.png");
+        EngineLeft = new JLabel(EngineSoundLeft);
+        EngineLeft.setOpaque(true);
+        EngineLeft.setBounds(890,280, 48,90);
+        EngineLeft.setVisible(false);
 
 
         //----------------------------------------------------------------------------------
@@ -294,15 +293,14 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmOff.setVisible(Load[5] != 0);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
+        //######Create the buttons#######
+        Ignition = IB.letrehoz();
+        Ignition.setBackground(Color.RED);
+        Ignition.addActionListener(this);
+        Ignition.setFont(new Font("Comic Sans", Font.BOLD, 16));
 
-        //######Gombok letrehozasa#######
-        gyujtas = IB.letrehoz();
-        gyujtas.setBackground(Color.RED);
-        gyujtas.addActionListener(this);
-        gyujtas.setFont(new Font("Comic Sans", Font.BOLD, 16));
-
-        inditas = SB.letrehoz();
-        inditas.addActionListener(this);
+        EngineStart = SB.letrehoz();
+        EngineStart.addActionListener(this);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
         //########Checkboxok letrehozasa##########
@@ -337,16 +335,16 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmNo.addActionListener(this);
 
         //##################################################################################################################
-        //################################----OBJECTEK HOZZAADASA A LAYEREDPANE-HEZ----#####################################
+        //####################################----ADD OBJECTS TO THE LAYERED PANE----#######################################
         //##################################################################################################################
         this.add(Background, JLayeredPane.DEFAULT_LAYER);
         this.add(Battery, JLayeredPane.PALETTE_LAYER);
         this.add(Motor, JLayeredPane.PALETTE_LAYER);
-        this.add(gyujtas, JLayeredPane.PALETTE_LAYER);
-        this.add(inditas, JLayeredPane.PALETTE_LAYER);
+        this.add(Ignition, JLayeredPane.PALETTE_LAYER);
+        this.add(EngineStart, JLayeredPane.PALETTE_LAYER);
         this.add(CodeSubmit, JLayeredPane.PALETTE_LAYER);
 
-        //-------Checkboxok hozzaadasa a LayeredPane-hez---------
+        //-------Add checkboxes to the Layered Pane---------
         this.add(CodeYes, JLayeredPane.PALETTE_LAYER);
         this.add(CodeNo, JLayeredPane.PALETTE_LAYER);
         this.add(KeyYes, JLayeredPane.PALETTE_LAYER);
@@ -359,10 +357,10 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         this.add(MoveNo, JLayeredPane.PALETTE_LAYER);
         this.add(AlarmYes, JLayeredPane.PALETTE_LAYER);
         this.add(AlarmNo, JLayeredPane.PALETTE_LAYER);
-        this.add(MotorRight, JLayeredPane.PALETTE_LAYER);
-        this.add(MotorLeft, JLayeredPane.PALETTE_LAYER);
+        this.add(EngineRight, JLayeredPane.PALETTE_LAYER);
+        this.add(EngineLeft, JLayeredPane.PALETTE_LAYER);
 
-        //-------Kepek hozzaadasa a LayeredPane-hez------------
+        //-------Add images to the Layered Pane------------
         this.add(CarCode, JLayeredPane.PALETTE_LAYER);
         this.add(PhoneSubmit, JLayeredPane.PALETTE_LAYER);
         this.add(Finger, JLayeredPane.PALETTE_LAYER);
@@ -432,11 +430,11 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     //#############################################----ACTION PERFORMER----#############################################
     //##################################################################################################################
     public void actionPerformed(ActionEvent e){
-        //Gyujtas gomb parancsok
-        if(e.getSource()==gyujtas){
-            Color piros = Color.RED;
-            if(gyujtas.getBackground() == piros){
-                gyujtas.setBackground(Color.GREEN);
+        //Ignition button task
+        if(e.getSource()==Ignition){
+            Color Red = Color.RED;
+            if(Ignition.getBackground() == Red){
+                Ignition.setBackground(Color.GREEN);
 
                 if(FingerPass.isVisible()){
                     FingerDone = true;
@@ -457,25 +455,26 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 DoneList.add(SpeedDone);
 
             }else{
-                gyujtas.setBackground(Color.RED);
-                MotorRight.setVisible(false);
-                MotorLeft.setVisible(false);
+                Ignition.setBackground(Color.RED);
+                EngineRight.setVisible(false);
+                EngineLeft.setVisible(false);
                 CodeDone = false; KeyDone = false; FingerDone = false; PhoneDone = false; SpeedDone = false;
                 EnabledList.clear();
                 DoneList.clear();
             }
         }
-        //Inditas gomb parancsok
-        if(e.getSource()==inditas){
-            Color zold = Color.GREEN;
-            //Ha zold
-            if(gyujtas.getBackground() == zold) {
+        //EngineStart button task
+        if(e.getSource()==EngineStart){
+            Color Green = Color.GREEN;
+            //If Green
+            if(Ignition.getBackground() == Green) {
                 if(EnabledList.equals(DoneList)){
+                    SpeedTimer.schedule(SpeedTask, 3*1000);
                     AlarmOn.setEnabled(true);
                     AlarmOff.setEnabled(false);
                 	WrongStartZero();
-                    MotorLeft.setVisible(true);
-                    MotorRight.setVisible(true);
+                    EngineLeft.setVisible(true);
+                    EngineRight.setVisible(true);
                     playSound();
                 }
                 WrongStartPlusOne();
@@ -485,7 +484,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 }
             }
         }
-        //A feladatok gombjai
+        //Task buttons commands
         if(e.getSource()==CodeSubmit){
             carcodestring = CarCode.getText();
             carcodeint = Integer.parseInt(carcodestring);
@@ -495,7 +494,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
             PhoneDone = true;
         }
         //------------------------------------------------------
-        //Chechbox parancsok
+        //Checkboxes commands
         if(e.getSource()==CodeYes){
             CodeNo.setSelected(false);
             CarCode.setVisible(true);
@@ -547,7 +546,6 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         if(e.getSource()==MoveYes){
             MoveNo.setSelected(false);
             Speedometer.setVisible(true);
-            SpeedTimer.schedule(SpeedTask, 5*1000);
         }
         if(e.getSource()==MoveNo){
             MoveYes.setSelected(false);

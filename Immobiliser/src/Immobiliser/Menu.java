@@ -33,7 +33,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setLayout(null);
         this.add(SB);
         this.add(EB);
-        this.setLocationRelativeTo(null); //The windows will be appear in the middle of the screen
+        this.setLocationRelativeTo(null); //The windows will appear in the middle of the screen
         this.setVisible(true); //The windows will be visible
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------

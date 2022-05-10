@@ -22,10 +22,10 @@ public class Simulation  extends JFrame implements ActionListener , KeyListener 
     //--------------------------------------------------------------------------------------------------------------------------------------------
     
     public Simulation(){
-        //A Layered Pane peldanyositasa ami a Simulation Frame-re fog kerulni.
+        //Create the Layered Pane witch we add to the Frame
         SimLP = new SimLayeredPane();
 
-        //Vissza a Menube es Vissza valasztani gombok pedanyosítasa
+        //Back to Menu and Back to Chose buttons
         BackToChose = BB.letrehoz();
         BackToChose.addActionListener(this);
         BackToChose.setFont(new Font("Comis Sans", Font.BOLD, 14));
@@ -34,20 +34,21 @@ public class Simulation  extends JFrame implements ActionListener , KeyListener 
         BackToMenu.addActionListener(this);
         BackToMenu.setFont(new Font("Comic Sans",Font.BOLD, 14));
 
-        //A gombok hozza adasa a SimLP Layered Pane-hez
+        //Add the buttons to the SimLP
         SimLP.add(BackToChose,JLayeredPane.PALETTE_LAYER);
         SimLP.add(BackToMenu, JLayeredPane.PALETTE_LAYER);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
         //#########################################################################
-        //##################----SZIMULACIOS FRAM OSSZERAKASA----##################
+        //######################----SIMULATION FRAME BUILD----#####################
         //#########################################################################
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Indításgátló");
         this.setVisible(true);
         this.add(SimLP);
         this.addKeyListener(this);
         this.setSize(1550,840);
-        this.setLocationRelativeTo(null); //a kÃ©pernyÅ‘ kÃ¶zÃ©pen fog megjelenni
+        this.setLocationRelativeTo(null); //It will appear in the middle of the screen
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------
 

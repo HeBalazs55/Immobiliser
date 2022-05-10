@@ -26,8 +26,6 @@ public class MenuDraw extends JPanel{
         toll.setPaint(Color.black);
         toll.setFont(new Font("Comic Sans", Font.BOLD, 10));
         toll.drawString("Készítette: Hegyi Balázs", 0, 790);
-
-
     }
 
 }//end

@@ -12,7 +12,6 @@ public class ChoseDraw extends JPanel{
         this.setPreferredSize(new Dimension(1540,800));} //Width-Height
     public void paint(Graphics g){
         Graphics2D toll = (Graphics2D) g;
-
         toll.setStroke(new BasicStroke(5));
         toll.drawRoundRect(475, 25, 600, 650, 50, 50);
     }
