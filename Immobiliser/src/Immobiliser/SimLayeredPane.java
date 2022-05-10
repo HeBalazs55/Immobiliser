@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -165,32 +166,6 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     //########################################----MAGA A LAYER DEKLARALASA----##########################################
     //##################################################################################################################
     SimLayeredPane(){
-        {
-            try {
-                EngineSoundStream = AudioSystem.getAudioInputStream(EngineSoundFile);
-            } catch (UnsupportedAudioFileException e) {
-                System.err.println("Hibás audio fájl formátum!");
-            } catch (IOException e) {
-                e.getMessage();
-            }
-        }
-        {
-            try {
-                clip = AudioSystem.getClip();
-            } catch (LineUnavailableException e) {
-                System.err.println("Nem lehet elérni az audio fájlt");
-            }
-        }
-        try {
-            clip.open(EngineSoundStream);
-        } catch (LineUnavailableException e) {
-            System.err.println("Nem lehet elérni az audio fájlt");
-        } catch (IOException e) {
-            System.err.println("A fájlt nem lehet lejátszani! Nincs hangszóró!");
-        }
-        gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(-15.0f);
-
         //#################################
         //#############HATTER##############
         //#################################
@@ -406,6 +381,34 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         DoneList = new ArrayList<>();
 
     }
+    private void playSound(){
+        {
+            try {
+                EngineSoundStream = AudioSystem.getAudioInputStream(EngineSoundFile);
+            } catch (UnsupportedAudioFileException e) {
+                System.err.println("Hibás audio fájl formátum!");
+            } catch (IOException e) {
+                e.getMessage();
+            }
+        }
+        {
+            try {
+                clip = AudioSystem.getClip();
+            } catch (LineUnavailableException e) {
+                System.err.println("Nem lehet elérni az audio fájlt");
+            }
+        }
+        try {
+            clip.open(EngineSoundStream);
+        } catch (LineUnavailableException e) {
+            System.err.println("Nem lehet elérni az audio fájlt");
+        } catch (IOException e) {
+            System.err.println("A fájlt nem lehet lejátszani! Nincs hangszóró!");
+        }
+        gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-15.0f);
+        clip.start();
+    }
 
     private class ClickListener extends MouseAdapter {
 
@@ -441,15 +444,12 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 if(checkCollision(CarKey, KeySensor)){
                     KeyDone = true;
                 }
-
-                EnabledList.clear();
                 EnabledList.add(CarCode.isVisible());
                 EnabledList.add(CarKey.isVisible());
                 EnabledList.add(FingerPass.isVisible());
                 EnabledList.add(Phone.isVisible());
                 EnabledList.add(Speedometer.isVisible());
 
-                DoneList.clear();
                 DoneList.add(CodeDone);
                 DoneList.add(KeyDone);
                 DoneList.add(FingerDone);
@@ -460,6 +460,9 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 gyujtas.setBackground(Color.RED);
                 MotorRight.setVisible(false);
                 MotorLeft.setVisible(false);
+                CodeDone = false; KeyDone = false; FingerDone = false; PhoneDone = false; SpeedDone = false;
+                EnabledList.clear();
+                DoneList.clear();
             }
         }
         //Inditas gomb parancsok
@@ -473,7 +476,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 	WrongStartZero();
                     MotorLeft.setVisible(true);
                     MotorRight.setVisible(true);
-                    clip.start();
+                    playSound();
                 }
                 WrongStartPlusOne();
                 if(getWrongStart()>3 && AlarmOn.isVisible()) {
