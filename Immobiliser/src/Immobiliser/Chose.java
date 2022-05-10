@@ -11,14 +11,12 @@ import java.awt.event.ActionListener;
 public class Chose extends JFrame implements ActionListener {
     ChoseDraw ChoseDraw;
     FileRead Reader = new FileRead();
-
     Textareas TF1 = new Textareas();
     JTextArea TextA;
 
     //-----------------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------CHECKBOXOK--------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------------------
-    // Globálisan létre hozzuk a Checkboxokat
     Integer[] C1Bounds = {630,200,130,20};
     Checkbox C1= new Checkbox("Gyenge védelem", C1Bounds);
     JCheckBox Weak;
@@ -30,14 +28,14 @@ public class Chose extends JFrame implements ActionListener {
     //-----------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------GOMBOK----------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------------------
-    //Globálisan létre hozzuk a Gombokat
+    //GlobÃ¡lisan lÃ©tre hozzuk a Gombokat
     Integer[] Startbounds = {810, 210, 110, 50};
     ChoseStartButton SB = new ChoseStartButton("Indítás", Startbounds, "Indítás", false);
     JButton StartButton;
 
 
     Integer[] OwnStartbounds = {660, 480, 200, 100};
-    ChoseOwnButton OB = new ChoseOwnButton("Sájat", OwnStartbounds, "<html>Saját csomag<br />összeállítása</html>", false);
+    ChoseOwnButton OB = new ChoseOwnButton("Saját", OwnStartbounds, "<html>Saját csomag<br />összeállítása</html>", false);
     JButton OwnButton;
 
 
@@ -69,26 +67,26 @@ public class Chose extends JFrame implements ActionListener {
         Strong = C2.letrehoz();
         Strong.addActionListener(this);
         //-----------------------------------------------------------------------------------------------------------------------------
-        //----------------------------------------------------Választás Frame összerakása----------------------------------------------
+        //-------------------------------------------------------Chose Frame Build-----------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------------
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Ha jobb felül az x-re kattintunk bezáródik az ablak, nem csak tálcázódik.
-        this.setTitle("Indításgátló"); //A Frame neve. Ez jelenik meg bal felül ha az ablak megnyílik.
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Ha jobb felÃ¼l az x-re kattintunk bezÃ¡rÃ³dik az ablak, nem csak tÃ¡lcÃ¡zÃ³dik.
+        this.setTitle("IndÃ­tÃ¡sgÃ¡tlÃ³"); //A Frame neve. Ez jelenik meg bal felÃ¼l ha az ablak megnyÃ­lik.
         this.add(ChoseDraw);
-        this.pack(); //Frame és JPanel illeszkedését intéző parancs
-        this.setLayout(null); //Elrendezés a frame-en.
+        this.pack(); //Frame Ã©s JPanel illeszkedÃ©sÃ©t intÃ©zÅ‘ parancs
+        this.setLayout(null); //ElrendezÃ©s a frame-en.
         this.add(StartButton);
         this.add(OwnButton);
         this.add(BackToMenuButton);
         this.add(Weak);
         this.add(Strong);
         this.add(TextA);
-        this.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
+        this.setLocationRelativeTo(null); //a kÃ©pernyÅ‘ kÃ¶zÃ©pen fog megjelenni
         this.setVisible(true); //az ablak megjelenik
     }
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==Weak){
             TextA.setText("");
-            String[] komponensek = Reader.FirstRow("src\\Weak.txt");
+            String[] komponensek = Reader.FirstRow("src\\weak.txt");
             Strong.setSelected(false);
             for (String s : komponensek) {
                 TextA.append(s + "\n");
@@ -96,7 +94,7 @@ public class Chose extends JFrame implements ActionListener {
         }
         if(e.getSource()==Strong){
             TextA.setText("");
-            String[] komponensek = Reader.FirstRow("src\\Strong.txt");
+            String[] komponensek = Reader.FirstRow("src\\strong.txt");
             Weak.setSelected(false);
             for (String s : komponensek) {
                 TextA.append(s + "\n");
@@ -104,18 +102,21 @@ public class Chose extends JFrame implements ActionListener {
         }
         if(e.getSource()==StartButton) {
             if (Weak.isSelected()) {
-                Reader.ComponentYesNo("src\\Weak.txt");
+                SimLayeredPane.setLoad(Reader.ComponentYesNo("src\\weak.txt"));
                 dispose();
                 new Simulation();
             } else if (Strong.isSelected()) {
-                Reader.ComponentYesNo("src\\Strong.txt");
+                SimLayeredPane.setLoad(Reader.ComponentYesNo("src\\strong.txt"));
                 dispose();
                 new Simulation();
             }
         }
         if (e.getSource() == OwnButton) {
+            Integer[] noLoad = {0,0,0,0,0,0};
+            SimLayeredPane.setLoad(noLoad);
             dispose();
             new Simulation();
+
         }
 
         if (e.getSource() == BackToMenuButton) {

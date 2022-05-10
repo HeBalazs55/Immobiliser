@@ -18,10 +18,23 @@ import java.util.TimerTask;
 import javax.sound.sampled.*;
 
 public class SimLayeredPane extends JLayeredPane implements ActionListener{
-    final String hozza = "Hozzáad";
-    final String torol = "Töröl";
+    final String Add = "Hozzáad";
+    final String Delete = "Töröl";
 
-    private int rosszinditas = 0;
+    public static Integer[] Load = {0,0,0,0,0,0};
+    public static void setLoad(Integer[] list){
+        for(int i = 0; i<list.length; i++){
+            Load[i] = list[i];
+        }
+    }
+    public int WrongStart = 0;
+    public int getWrongStart() {return WrongStart;}
+    public void WrongStartPlusOne() {
+    	WrongStart+=1;
+    }
+    public void WrongStartZero() {
+    	WrongStart = 0;
+    }
     //--------------------------------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------------------------------
     JLabel Battery; JLabel Motor; JLabel Background; JLabel MotorRight; JLabel MotorLeft;
@@ -85,70 +98,67 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
 
 
     //##################################################################################################################
-    //################################################----GOMBOK----####################################################
+    //################################################----BUTTONS----###################################################
     //##################################################################################################################
-    //Gyújtás gomb deklarálása
+    //Gy�jt�s gomb deklar�l�sa
     Integer[] IgnitionBounds = {280, 275, 100, 40};
     SimIgnitionButton IB = new SimIgnitionButton("Gyújtás", IgnitionBounds, "Gyújtás", false);
     JButton gyujtas;
 
-    //Indítás gomb deklarálása
+    //Ind�t�s gomb deklar�l�sa
     Integer[] StartBounds = {280, 335, 100, 40};
     SimStartButton SB = new SimStartButton("Indítás", StartBounds, "Start", false);
     JButton inditas;
-
-
-
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
     //##################################################################################################################
     //##############################################----CHECKBOXOK----##################################################
     //##################################################################################################################
     Integer[] C1Bounds = {1280, 130 ,85 , 15};
-    Checkboxes.Checkbox C1 = new Checkboxes.Checkbox(hozza, C1Bounds);
+    Checkboxes.Checkbox C1 = new Checkboxes.Checkbox(Add, C1Bounds);
     JCheckBox CodeYes;
 
     Integer[] C2Bounds = {1390, 130, 85, 15};
-    Checkboxes.Checkbox C2 = new Checkboxes.Checkbox(torol, C2Bounds);
+    Checkboxes.Checkbox C2 = new Checkboxes.Checkbox(Delete, C2Bounds);
     JCheckBox CodeNo;
     //------------------------------------------------------
     Integer[] C3Bounds = {1280, 240, 85, 15};
-    Checkboxes.Checkbox C3 = new Checkboxes.Checkbox(hozza, C3Bounds);
+    Checkboxes.Checkbox C3 = new Checkboxes.Checkbox(Add, C3Bounds);
     JCheckBox KeyYes;
     Integer[] C4Bounds = {1390, 240, 85, 15};
-    Checkboxes.Checkbox C4 = new Checkboxes.Checkbox(torol, C4Bounds);
+    Checkboxes.Checkbox C4 = new Checkboxes.Checkbox(Delete, C4Bounds);
     JCheckBox KeyNo;
     //------------------------------------------------------
     Integer[] C5Bounds = {1280,350,85,15};
-    Checkboxes.Checkbox C5 = new Checkboxes.Checkbox(hozza, C5Bounds);
+    Checkboxes.Checkbox C5 = new Checkboxes.Checkbox(Add, C5Bounds);
     JCheckBox FingerYes;
 
     Integer[] C6Bounds = {1390,350,85,15};
-    Checkboxes.Checkbox C6 = new Checkboxes.Checkbox(torol, C6Bounds);
+    Checkboxes.Checkbox C6 = new Checkboxes.Checkbox(Delete, C6Bounds);
     JCheckBox FingerNo;
     //------------------------------------------------------
     Integer[] C7Bounds = {1280, 460, 85, 15};
-    Checkboxes.Checkbox C7 = new Checkboxes.Checkbox(hozza, C7Bounds);
+    Checkboxes.Checkbox C7 = new Checkboxes.Checkbox(Add, C7Bounds);
     JCheckBox PhoneYes;
 
     Integer[] C8Bounds = {1390, 460, 85, 15};
-    Checkboxes.Checkbox C8 = new Checkboxes.Checkbox(torol, C8Bounds);
+    Checkboxes.Checkbox C8 = new Checkboxes.Checkbox(Delete, C8Bounds);
     JCheckBox PhoneNo;
     //------------------------------------------------------
     Integer[] C9Bounds = {1280, 570, 85, 15};
-    Checkboxes.Checkbox C9 = new Checkboxes.Checkbox(hozza, C9Bounds);
+    Checkboxes.Checkbox C9 = new Checkboxes.Checkbox(Add, C9Bounds);
     JCheckBox MoveYes;
 
     Integer[] C10Bounds = {1390, 570, 85, 15};
-    Checkboxes.Checkbox C10 = new Checkboxes.Checkbox(torol, C10Bounds);
+    Checkboxes.Checkbox C10 = new Checkboxes.Checkbox(Delete, C10Bounds);
     JCheckBox MoveNo;
     //------------------------------------------------------
     Integer[] C11Bounds = {1280, 680, 85, 15};
-    Checkboxes.Checkbox C11 = new Checkboxes.Checkbox(hozza, C11Bounds);
+    Checkboxes.Checkbox C11 = new Checkboxes.Checkbox(Add, C11Bounds);
     JCheckBox AlarmYes;
 
     Integer[] C12Bounds = {1390, 680, 85, 15};
-    Checkboxes.Checkbox C12 = new Checkbox(torol, C12Bounds);
+    Checkboxes.Checkbox C12 = new Checkbox(Delete, C12Bounds);
     JCheckBox AlarmNo;
 
     //##################################################################################################################
@@ -159,30 +169,30 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
             try {
                 EngineSoundStream = AudioSystem.getAudioInputStream(EngineSoundFile);
             } catch (UnsupportedAudioFileException e) {
-                throw new RuntimeException(e);
+                System.err.println("Hibás audio fájl formátum!");
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.getMessage();
             }
         }
         {
             try {
                 clip = AudioSystem.getClip();
             } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
+                System.err.println("Nem lehet elérni az audio fájlt");
             }
         }
         try {
             clip.open(EngineSoundStream);
         } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
+            System.err.println("Nem lehet elérni az audio fájlt");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("A fájlt nem lehet lejátszani! Nincs hangszóró!");
         }
         gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(-15.0f);
 
         //#################################
-        //#############HÁTTÉR##############
+        //#############HATTER##############
         //#################################
         ImageIcon BackgroundImage = new ImageIcon("background.PNG");
         Background = new JLabel(BackgroundImage);
@@ -205,7 +215,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
 
 
         //#############################################
-        //####Gombra vagy checkboxra aktiváló képek####
+        //####Gombra vagy checkboxra aktivalodo kepek####
         //#############################################
         ImageIcon motorsoundjobb = new ImageIcon("motorsound1.png");
         MotorRight = new JLabel(motorsoundjobb);
@@ -223,12 +233,14 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         //----------------------------------------------------------------------------------
         CarCode = new JTextField();
         CarCode.setBounds(430,520,80,20);
-        CarCode.setVisible(false);
+        CarCode.setVisible(Load[0] != 0);
+
 
         CodeSubmit = CSB.letrehoz();
         CodeSubmit.setFont(new Font("Comic Sans", Font.BOLD, 10));
         CodeSubmit.addActionListener(this);
-        CodeSubmit.setVisible(false);
+        CodeSubmit.setVisible(Load[0] != 0);
+
 
         //----------------------------------------------------------------------------------
 
@@ -237,13 +249,13 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         KeySensor.setOpaque(true);
         KeySensor.setBounds(250,520,56,74);
         KeySensor.setVisible(false);
-
-
+        KeySensor.setVisible(Load[1] != 0);
 
         CarKey = new JLabel(CarKeyImage);
         CarKey.setOpaque(true);
         CarKey.setBounds(120, 600, 60,100);
         CarKey.setVisible(false);
+        CarKey.setVisible(Load[1] != 0);
         KeyImageCorner = new Point(0,0);
         ClickListener clickListener = new ClickListener();
         DragListener dragListener = new DragListener();
@@ -255,11 +267,13 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Phone.setOpaque(true);
         Phone.setBounds(850,520,125,223);
         Phone.setVisible(false);
+        Phone.setVisible(Load[2] != 0);
 
         PhoneSubmit = PSB.letrehoz();
         PhoneSubmit.setFont(new Font("Comic Sans", Font.BOLD, 10));
         PhoneSubmit.addActionListener(this);
         PhoneSubmit.setVisible(false);
+        PhoneSubmit.setVisible(Load[2] != 0);
 
         //----------------------------------------------------------------------------------
 
@@ -268,12 +282,14 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Finger.setOpaque(true);
         Finger.setBounds(630,520,64,64);
         Finger.setVisible(false);
+        Finger.setVisible(Load[3] != 0);
 
         ImageIcon FingerImagePass = new ImageIcon("fingerpass.png");
         FingerPass = new JLabel(FingerImagePass);
         FingerPass.setOpaque(true);
         FingerPass.setBounds(630,520,66,66);
         FingerPass.setVisible(false);
+        FingerPass.setVisible(Load[3] != 0);
 
         //----------------------------------------------------------------------------------
 
@@ -282,6 +298,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         Speedometer.setOpaque(true);
         Speedometer.setBounds(720, 95, 128, 128);
         Speedometer.setVisible(false);
+        Speedometer.setVisible(Load[4] != 0);
 
 
         //----------------------------------------------------------------------------------
@@ -291,6 +308,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmOn.setEnabled(false);
         AlarmOn.setBounds(130,100, 112,112);
         AlarmOn.setVisible(false);
+        AlarmOn.setVisible(Load[5] != 0);
 
         ImageIcon AlarmOffImage = new ImageIcon("AlarmOff.png");
         AlarmOff = new JLabel(AlarmOffImage);
@@ -298,10 +316,11 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmOff.setEnabled(false);
         AlarmOff.setBounds(242,100, 112,112);
         AlarmOff.setVisible(false);
+        AlarmOff.setVisible(Load[5] != 0);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
-        //######Gombok létrehozása#######
+        //######Gombok letrehozasa#######
         gyujtas = IB.letrehoz();
         gyujtas.setBackground(Color.RED);
         gyujtas.addActionListener(this);
@@ -311,7 +330,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         inditas.addActionListener(this);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-        //########Checkboxok létrehozása##########
+        //########Checkboxok letrehozasa##########
         CodeYes = C1.letrehoz();
         CodeYes.addActionListener(this);
         CodeNo = C2.letrehoz();
@@ -343,7 +362,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         AlarmNo.addActionListener(this);
 
         //##################################################################################################################
-        //################################----OBJECTEK HOZZAADASA A LAYEREDPANE-hez----#####################################
+        //################################----OBJECTEK HOZZAADASA A LAYEREDPANE-HEZ----#####################################
         //##################################################################################################################
         this.add(Background, JLayeredPane.DEFAULT_LAYER);
         this.add(Battery, JLayeredPane.PALETTE_LAYER);
@@ -352,7 +371,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         this.add(inditas, JLayeredPane.PALETTE_LAYER);
         this.add(CodeSubmit, JLayeredPane.PALETTE_LAYER);
 
-        //-------Checkboxok hozzáadása a LayeredPane-hez---------
+        //-------Checkboxok hozzaadasa a LayeredPane-hez---------
         this.add(CodeYes, JLayeredPane.PALETTE_LAYER);
         this.add(CodeNo, JLayeredPane.PALETTE_LAYER);
         this.add(KeyYes, JLayeredPane.PALETTE_LAYER);
@@ -368,7 +387,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
         this.add(MotorRight, JLayeredPane.PALETTE_LAYER);
         this.add(MotorLeft, JLayeredPane.PALETTE_LAYER);
 
-        //-------Képek hozzáadása a LayeredPane-hez------------
+        //-------Kepek hozzaadasa a LayeredPane-hez------------
         this.add(CarCode, JLayeredPane.PALETTE_LAYER);
         this.add(PhoneSubmit, JLayeredPane.PALETTE_LAYER);
         this.add(Finger, JLayeredPane.PALETTE_LAYER);
@@ -390,7 +409,6 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
 
     private class ClickListener extends MouseAdapter {
 
-
         public void mousePressed(MouseEvent e){
             prevPt = e.getPoint();
         }
@@ -411,7 +429,7 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
     //#############################################----ACTION PERFORMER----#############################################
     //##################################################################################################################
     public void actionPerformed(ActionEvent e){
-        //Gyújtás gomb parancsok
+        //Gyujtas gomb parancsok
         if(e.getSource()==gyujtas){
             Color piros = Color.RED;
             if(gyujtas.getBackground() == piros){
@@ -444,15 +462,23 @@ public class SimLayeredPane extends JLayeredPane implements ActionListener{
                 MotorLeft.setVisible(false);
             }
         }
-        //Indítás gomb parancsok
+        //Inditas gomb parancsok
         if(e.getSource()==inditas){
             Color zold = Color.GREEN;
-            //Ha zöld
+            //Ha zold
             if(gyujtas.getBackground() == zold) {
                 if(EnabledList.equals(DoneList)){
+                    AlarmOn.setEnabled(true);
+                    AlarmOff.setEnabled(false);
+                	WrongStartZero();
                     MotorLeft.setVisible(true);
                     MotorRight.setVisible(true);
                     clip.start();
+                }
+                WrongStartPlusOne();
+                if(getWrongStart()>3 && AlarmOn.isVisible()) {
+                	AlarmOn.setEnabled(false);
+                	AlarmOff.setEnabled(true);
                 }
             }
         }

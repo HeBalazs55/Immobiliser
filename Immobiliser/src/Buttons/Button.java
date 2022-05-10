@@ -19,6 +19,7 @@ abstract public class Button extends JButton{
     public Integer getBound4() {return bounds[3];}
     public String getText() {return text;}
     public Boolean getFocusable() {return focusable;}
+    
     public JButton letrehoz(){
         JButton gomb = new JButton(name);
         gomb.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);

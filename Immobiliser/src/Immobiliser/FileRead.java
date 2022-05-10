@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class FileRead {
     private Scanner in;
 
-    //-----A fájlban tárolt komponensek neveit írja csak ki-----------------
+    //-----Give back the first row of the file in a String[]-----------------
     public String[] FirstRow(String s){
         File beolvasottf;
         String elsosor = "";
@@ -18,7 +18,7 @@ public class FileRead {
             in.close();
 
         }catch(FileNotFoundException e){
-            System.out.println("Szar van a levesben");
+            System.err.println("Nincs ilyen fájl");
         }
         String[] fileadat;
         fileadat = elsosor.split(", ");
@@ -26,11 +26,11 @@ public class FileRead {
         return fileadat;
     }
 
-    //------A fájlban tárolt komponensek van benne/nincs benne beolvasása--------
-    public int[] ComponentYesNo(String s){
+    //------Give back the component settings (0-no/1-yes) from the file--------
+    public Integer[] ComponentYesNo(String s){
         File beolvasottf;
 
-        int[] fileadat = new int[6];
+        Integer[] fileadat = new Integer[6];
         try{
             beolvasottf = new File(s);
             in = new Scanner(beolvasottf);
@@ -40,7 +40,7 @@ public class FileRead {
             }
             in.close();
         }catch(FileNotFoundException e){
-            System.out.println("Szar van a levesben");
+            System.err.println("Nincs ilyen fájl!");
         }
         return fileadat;
     }

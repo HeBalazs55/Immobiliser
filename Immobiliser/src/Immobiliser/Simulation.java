@@ -22,10 +22,10 @@ public class Simulation  extends JFrame implements ActionListener , KeyListener 
     //--------------------------------------------------------------------------------------------------------------------------------------------
     
     public Simulation(){
-        //A Layered Pane példányosítása ami a Simulation Frame-re fog kerülni.
+        //A Layered Pane peldanyositasa ami a Simulation Frame-re fog kerulni.
         SimLP = new SimLayeredPane();
 
-        //Vissza a Menübe és Vissza választani gombok deklarálása
+        //Vissza a Menube es Vissza valasztani gombok pedanyosítasa
         BackToChose = BB.letrehoz();
         BackToChose.addActionListener(this);
         BackToChose.setFont(new Font("Comis Sans", Font.BOLD, 14));
@@ -34,32 +34,30 @@ public class Simulation  extends JFrame implements ActionListener , KeyListener 
         BackToMenu.addActionListener(this);
         BackToMenu.setFont(new Font("Comic Sans",Font.BOLD, 14));
 
-        //A gombok hozzá adása a SimLP Layered Pane-hez
+        //A gombok hozza adasa a SimLP Layered Pane-hez
         SimLP.add(BackToChose,JLayeredPane.PALETTE_LAYER);
         SimLP.add(BackToMenu, JLayeredPane.PALETTE_LAYER);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
         //#########################################################################
-        //##################----SZIMULÁCIÓS FRAME ÖSSZERAKÁSA----##################
+        //##################----SZIMULACIOS FRAM OSSZERAKASA----##################
         //#########################################################################
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.add(SimLP);
         this.addKeyListener(this);
         this.setSize(1550,840);
-        this.setLocationRelativeTo(null); //a képernyő középen fog megjelenni
+        this.setLocationRelativeTo(null); //a kÃ©pernyÅ‘ kÃ¶zÃ©pen fog megjelenni
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------
-    //A Simulation Framet bezáró parancs
-    public void close(){dispose();}
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == BackToChose) {
-            close();
+            dispose();
             new Chose();
         }
         if (e.getSource() == BackToMenu) {
-            close();
+            dispose();
             new Menu();
         }
     }
